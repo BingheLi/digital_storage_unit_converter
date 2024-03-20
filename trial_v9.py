@@ -11,9 +11,18 @@ class SolutionWindow:
         Label(self.solution_window, text=solution, font=("Arial", 12)).pack(padx=20, pady=20)
 
 
+class InfoWindow:
+
+    def __init__(self, parent, Info):
+        self.info_window = Toplevel(parent)
+        self.info_window.title("Instruction")
+
+        Label(self.info_window, text=Info, font=("Arial", 12)).pack(padx=20, pady=20)
+
+
 class Converter:
 
-    def __init__(self, parent):
+    def __init__(self):
 
         # Initialise variables (such as the feedback variable)
         self.var_feedback = StringVar()
@@ -25,17 +34,15 @@ class Converter:
         self.all_calculations = []
 
         # Set up GUI Frame
-        self.storage_frame = Frame(parent, padx=10, pady=10, bg="#FFE4E1")
-        self.storage_frame.grid(sticky="nsew")
-        parent.grid_rowconfigure(0, weight=1)
-        parent.grid_columnconfigure(0, weight=1)
+        self.storage_frame = Frame(padx=10, pady=10, bg="#FFE4E1")
+        self.storage_frame.grid()
 
         self.storage_heading = Label(self.storage_frame,
                                      text="Digital Storage Unit Converter",
                                      font=("Arial", "16", "bold"),
                                      bg="#FFE4E1",
                                      fg="#FF69B4")
-        self.storage_heading.grid(row=0, column=0, columnspan=2, pady=(0, 10))
+        self.storage_heading.grid(row=0, columnspan=4, pady=(0, 10))
 
         instructions = "Please enter a value below and " \
                        "select the units to convert from and to."
@@ -45,11 +52,11 @@ class Converter:
                                           justify="left",
                                           bg="#FFE4E1",
                                           fg="#FF69B4")
-        self.storage_instructions.grid(row=1, column=0, columnspan=2, pady=(0, 10))
+        self.storage_instructions.grid(row=1, columnspan=4, pady=(0, 10))
 
         self.storage_entry = Entry(self.storage_frame,
                                    font=("Arial", "14"))
-        self.storage_entry.grid(row=2, column=0, padx=5, pady=5, sticky="we")
+        self.storage_entry.grid(row=2, column=0, padx=5, pady=5, sticky="we", columnspan=2)
 
         self.from_unit_label = Label(self.storage_frame, text="From:", bg="#FFE4E1", fg="#FF69B4")
         self.from_unit_label.grid(row=3, column=0, padx=5, pady=5, sticky=W)
@@ -73,47 +80,49 @@ class Converter:
         self.output_label = Label(self.storage_frame, text="",
                                   fg="#FF69B4",
                                   bg="#FFE4E1")
-        self.output_label.grid(row=5, column=0, columnspan=2)
+        self.output_label.grid(row=5, columnspan=4)
 
         # Buttons
         button_bg = "#FF69B4"
+        self.info_button = Button(self.storage_frame,
+                                      text="Info",
+                                      bg="#FFC0CB",
+                                      fg="#000000",
+                                      font=("Arial", "12", "bold"), width=12,
+                                      command=self.show_info)
+        self.info_button.grid(row=7,column=2, columnspan=2, padx=5, pady=5)
+
         self.clear_button = Button(self.storage_frame,
                                    text="Clear",
                                    bg=button_bg,
                                    fg="#FFFFFF",
                                    font=("Arial", "12", "bold"), width=12,
                                    command=self.clear_entry)
-        self.clear_button.grid(row=2, column=1, padx=5, pady=5)
+        self.clear_button.grid(row=2, column=2, padx=5, pady=5)
 
         self.convert_button = Button(self.storage_frame,
                                      text="Convert",
                                      bg=button_bg,
                                      fg="#FFFFFF",
-                                     font=("Arial", "12", "bold"),
+                                     font=("Arial", "12", "bold"), width=12,
                                      command=self.storage_convert)
-        self.convert_button.grid(row=6, column=0, columnspan=2, pady=5, sticky="we")
+        self.convert_button.grid(row=6, columnspan=2, padx=5, pady=5)
 
         self.solution_button = Button(self.storage_frame,
                                       text="Show Solution",
                                       bg=button_bg,
                                       fg="#FFFFFF",
-                                      font=("Arial", "12", "bold"),
+                                      font=("Arial", "12", "bold"), width=12,
                                       command=self.show_solution)
-        self.solution_button.grid(row=7, column=0, columnspan=2, pady=5, sticky="we")
+        self.solution_button.grid(row=6,column=2, columnspan=2, padx=5, pady=5)
 
         self.donation_button = Button(self.storage_frame,
                                       text="Donate",
                                       bg="#FFC0CB",
                                       fg="#000000",
-                                      font=("Arial", "12", "bold"),
+                                      font=("Arial", "12", "bold"), width=12,
                                       command=self.open_donation_link)
-        self.donation_button.grid(row=8, column=0, columnspan=2, pady=5, sticky="we")
-
-        # Set row and column configurations for resizing
-        self.storage_frame.grid_rowconfigure(2, weight=1)
-        self.storage_frame.grid_rowconfigure(5, weight=1)
-        self.storage_frame.grid_columnconfigure(0, weight=1)
-        self.storage_frame.grid_columnconfigure(1, weight=1)
+        self.donation_button.grid(row=7, columnspan=2, padx=5, pady=5)
 
     # checks user input and if it's valid, converts value
     def check_value(self):
@@ -184,6 +193,11 @@ class Converter:
     def clear_entry(self):
         self.storage_entry.delete(0, END)
 
+    def show_info(self):
+        info = "THIS IS A FUCKING UNIT CONVERTER\n" \
+               "YOU DUMB FUCK"
+        InfoWindow(self.storage_frame, info)
+
     # Shows the solution of the conversion
     def show_solution(self):
         value_to_convert = self.check_value()
@@ -206,7 +220,7 @@ class Converter:
 
     # Opens the donation link
     def open_donation_link(self):
-        webbrowser.open_new("https://mmc.school.nz")
+        webbrowser.open_new("https://www.savethechildren.org/us/where-we-work/africa")
 
     # Shows user output and clears entry widget
     # ready for next calculation
@@ -230,6 +244,5 @@ class Converter:
 if __name__ == "__main__":
     root = Tk()
     root.title("Digital Storage Unit Converter")
-    root.geometry("400x300")  # Set initial window size
-    Converter(root)
+    Converter()
     root.mainloop()
